@@ -1,0 +1,288 @@
+{% extends 'base.html' %}
+{% include 'header.html' %}
+{% block title %} Home {% endblock %}
+{% block body %}
+
+<div class="container">
+    <div class="row">
+         <div class="col md-12">
+            <div class="jumbotron p-3">
+
+    <h2>Meeting <b>Organizer</b>
+    <button type="button" class="btn btn-success float-right" data-toggle="modal" data-target="#mymodal">
+
+        Yeni Toplantı Ekle
+
+    </button>
+</h2>
+
+
+
+    {%  with messages  = get_flashed_messages()  %}
+
+    {% if messages %}
+
+
+    {% for messsage in messages %}
+
+    <div class="alert alert-success alert-dismissable" role="alert">
+
+        <button type="button" class="close" data-dismiss="alert" aria-label="close">
+
+
+            <span aria-hidden="true">x</span>
+
+        </button>
+                 {{ "Değişiklik Yapıldı" }}
+
+    </div>
+
+
+
+
+    {% endfor %}
+
+
+    {% endif %}
+
+    {% endwith %}
+
+    <table class="table table-hover table-dark">
+        <tr>
+            <th>Toplantı Konusu</th>
+            <th>Tarih</th>
+            <th>Başlangıç Saati</th>
+            <th>Bitiş Saati</th>
+            <th>Katılımcılar</th>
+            <th>İşlem</th>
+
+        </tr>
+
+        {% for row in toplanti %}
+
+<tr>
+    <td>{{row.konu}}</td>
+    <td>{{row.tarih}}</td>
+    <td>{{row.baslangic}}</td>
+    <td>{{row.bitis}}</td>
+    <td>{{row.katilimcilar}}</td>
+    <td>
+
+        <a href="/update/{{row.id}}" class="btn btn-warning btn-xs" data-toggle="modal" data-target="#modaledit{{row.id}}">Düzenle</a>
+        <a href="/delete/{{row.id}}" class="btn btn-danger btn-xs" onclick="return confirm('Toplantı Kaydını Sİlmek İstediğinize Emin misiniz?')">Sil</a>
+    </td>
+
+</tr>
+
+
+
+                 <!-- Toplantı Güncelleme-->
+<div id="modaledit{{row.id}}" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+            <h4 class="modal-title">Toplantı Bilgisi GÜncelleme</h4>
+         </div>
+                <div class="modal-body">
+                <form action="{{url_for('update')}}" method="POST">
+                    <div class="form-group">
+
+                        <label>Toplantı Konusu:</label>
+                        <input type="hidden" name="id" value="{{row.id}}">
+                            <input type="text" class="form-control" name="konu" value="{{row.konu}}" required="1">
+
+
+               </div>
+
+
+                <div class="form-group">
+
+
+                  <label>Tarih:</label>
+                  <input type="date" class="form-control" name="tarih" value="{{row.tarih}}" required="1">
+
+
+               </div>
+
+
+                <div class="form-group">
+
+
+                  <label>Başlangıç Saati:</label>
+                  <input type="time" class="form-control" name="baslangic" value="{{row.baslangic}}" required="1">
+
+
+               </div>
+
+                <div class="form-group">
+
+                <label>Bitiş Saati:</label>
+                  <input type="time" class="form-control" name="bitis" value="{{row.bitis}}" required="1">
+
+
+               </div>
+
+                <div class="form-group">
+
+
+                  <label>Katılımcılar:</label>
+                  <input type="text" class="form-control" name="katilimcilar" value="{{row.katilimcilar}}" required="1">
+
+
+               </div>
+
+
+
+               <div class="form-group">
+
+
+                  <button class="btn btn-primary" type="submit">Güncelle</button>
+
+
+               </div>
+
+
+            </form>
+
+
+         </div>
+
+
+         <div class="modal-footer">
+
+
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+
+
+         </div>
+
+
+      </div>
+
+
+   </div>
+
+</div>
+
+    {% endfor %}
+    </table>
+
+</div>
+
+
+
+
+
+<!-- Toplantı Ekleme-->
+
+
+<div id="mymodal" class="modal fade" role="dialog">
+   <div class="modal-dialog">
+      <div class="modal-content">
+         <div class="modal-header">
+
+            <h4 class="modal-title">Yeni Toplantı Kaydı Oluştur</h4>
+         </div>
+         <div class="modal-body">
+
+            <form action="{{url_for('insert')}}" method="POST">
+
+
+               <div class="form-group">
+
+                  <label>Toplantı Konusu:</label>
+                   <input type="hidden" name="id" >
+                  <input type="text" class="form-control" name="konu" required="1">
+
+
+               </div>
+
+
+                <div class="form-group">
+
+
+                  <label>Tarih:</label>
+                  <input type="date" class="form-control" name="tarih" required="1">
+
+
+               </div>
+
+
+                <div class="form-group">
+
+
+                  <label>Başlangıç Saati:</label>
+                  <input type="time" class="form-control" name="baslangic" required="1">
+
+
+               </div>
+
+                <div class="form-group">
+
+                <label>Bitiş Saati:</label>
+                  <input type="time" class="form-control" name="bitis" required="1">
+
+
+               </div>
+
+                <div class="form-group">
+
+
+                  <label>Katılımcılar:</label>
+                  <input type="text" class="form-control" name="katilimcilar" required="1">
+
+
+               </div>
+
+
+
+               <div class="form-group">
+
+
+                  <button class="btn btn-primary" type="submit">Toplantıyı Ekle</button>
+
+
+               </div>
+
+
+            </form>
+
+
+         </div>
+
+
+         <div class="modal-footer">
+
+
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">İptal</button>
+
+
+
+
+
+      </div>
+
+
+   </div>
+
+
+</div>
+
+
+
+
+
+
+
+
+    </div>
+
+</div>
+
+
+</div>
+</div>
+
+
+
+{% endblock %}
