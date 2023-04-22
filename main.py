@@ -69,7 +69,7 @@ def insert():
         return redirect(url_for('Index'))
 
 
-
+#değişiklik yaptım
 @app.route('/update', methods = ['GET', 'POST'])
 def update():
 
